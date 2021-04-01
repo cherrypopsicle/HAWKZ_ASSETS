@@ -10,7 +10,7 @@ public class SteeringWheel : MonoBehaviour
     [SerializeField] private GameObject rightHand;
     [SerializeField] private float maxDistance;
 
-    // used to be accessed by NightHawk
+    // accessed by NightHawk
     public float wheelRotation;
     // Start is called before the first frame update
     void Start()
@@ -20,7 +20,7 @@ public class SteeringWheel : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         CheckDistanceToHands(leftHand, rightHand);
         var rightTrigger = OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch);
@@ -28,14 +28,14 @@ public class SteeringWheel : MonoBehaviour
         if (leftHandPlaced == true && leftTrigger)
         {
             Vector3 dest = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, -(leftHand.transform.rotation.eulerAngles.z));
-            transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, dest, 2.0f);
+            transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, dest, 100.0f);
             wheelRotation = transform.localEulerAngles.z;
-        }
 
+        }
         else if (rightHandPlaced == true && rightTrigger)
         {
             Vector3 dest = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, -(rightHand.transform.rotation.eulerAngles.z));
-            transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, dest, 2.0f);
+            transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, dest, 100.0f);
             wheelRotation = transform.localEulerAngles.z;
         }
 

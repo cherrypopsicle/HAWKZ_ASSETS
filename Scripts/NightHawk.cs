@@ -82,7 +82,6 @@ public class NightHawk : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient && !spawnChoppa)
         {
             Choppa = PhotonNetwork.InstantiateRoomObject("Choppa", ChoppaHolster.transform.position, ChoppaHolster.transform.rotation) as GameObject;
-            Choppa.transform.SetParent(transform);
             spawnChoppa = true;
         }
         //FindNormal();
@@ -133,9 +132,11 @@ public class NightHawk : MonoBehaviourPunCallbacks
         //}
     }
 
+
+
     void CalculateSteeringWheelRotation()
     {
-        float zAngle = SteeringWheel.GetComponent<SteeringWheel>().wheelRotation;
+        float zAngle = SteeringWheel.GetComponent<NewSteeringWheel>().wheelRotation;
         zAngle = (zAngle > 180) ? zAngle - 360 : zAngle;
         float finalAngle = Mathf.Floor(zAngle);
         var steer = -(-finalAngle / 180.0f);

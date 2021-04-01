@@ -15,6 +15,9 @@ public class Choppa : MonoBehaviourPunCallbacks
     [SerializeField] public bool shootingRight;
     [SerializeField] public bool shootingLeft;
 
+    // AudioSources
+    [SerializeField] private AudioSource fire;
+
     // Enum
     [SerializeField] public enum handGrab { LeftHand, RightHand, None };
     [SerializeField] public handGrab grab = handGrab.None;
@@ -27,7 +30,7 @@ public class Choppa : MonoBehaviourPunCallbacks
     // Floats 
     [SerializeField] private float BulletForce;
     [SerializeField] private float perShotDelay = 0.3f;
-    [SerializeField] private float timeToMove = 1.0f;
+    [SerializeField] private float timeToMove = 2.0f;
     [SerializeField] private float timeToDestroy = 10.0f;
 
     // private fields
@@ -36,7 +39,6 @@ public class Choppa : MonoBehaviourPunCallbacks
     private float grabTime = 0.0f;
     private float timestamp = 0.0f;
     private ParticleSystem muzzleSystem;
-    private AudioSource fire;
 
     // Start is called before the first frame update
     void Start()
@@ -49,13 +51,12 @@ public class Choppa : MonoBehaviourPunCallbacks
         LeftHand = GameObject.FindGameObjectWithTag("LeftControllerAnchor");
         RightHand = GameObject.FindGameObjectWithTag("RightControllerAnchor");
         Muzzle = GameObject.FindGameObjectWithTag("Muzzle");
-        OriginalParent = transform.parent.gameObject;
         fire = GetComponent<AudioSource>();
         muzzleSystem = Muzzle.GetComponent<ParticleSystem>();
         var main = muzzleSystem.main;
         main.simulationSpeed = 2.0f;
+        OriginalParent = transform.parent.gameObject;
     }
-
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -76,6 +77,7 @@ public class Choppa : MonoBehaviourPunCallbacks
 
         if (transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
+            Debug.Log("Something is grabbing me!");
             photonView.RequestOwnership();
             GameObject grabbedBy = transform.GetComponent<OVRGrabbable>().grabbedBy.gameObject;
             grabbed = true;
@@ -99,7 +101,7 @@ public class Choppa : MonoBehaviourPunCallbacks
             grabbed = false;
             rb.isKinematic = true;
             transform.parent = OriginalParent.transform;
-            //FloatToHolster();
+            FloatToHolster();
             grab = handGrab.None;
         }
     }
