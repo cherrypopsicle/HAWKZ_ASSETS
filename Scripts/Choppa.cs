@@ -8,7 +8,7 @@ public class Choppa : MonoBehaviourPunCallbacks
 {
     // Serialized Fields
     // GameObjects
-    [SerializeField] private GameObject Barrel, Bullet, ChoppaHolster, OriginalParent, LeftHand, RightHand, arrayOfPrefabs, Muzzle;
+    [SerializeField] private GameObject Barrel, Bullet, ChoppaHolster, OriginalParent, LeftHand, RightHand, arrayOfPrefabs;//, Muzzle;
 
     // Boolean
     [SerializeField] public bool grabbed = false;
@@ -50,9 +50,9 @@ public class Choppa : MonoBehaviourPunCallbacks
         ChoppaHolster = GameObject.FindGameObjectWithTag("Holster");
         LeftHand = GameObject.FindGameObjectWithTag("LeftControllerAnchor");
         RightHand = GameObject.FindGameObjectWithTag("RightControllerAnchor");
-        Muzzle = GameObject.FindGameObjectWithTag("Muzzle");
+        //Muzzle = GameObject.FindGameObjectWithTag("Muzzle");
         fire = GetComponent<AudioSource>();
-        muzzleSystem = Muzzle.GetComponent<ParticleSystem>();
+        //muzzleSystem = Muzzle.GetComponent<ParticleSystem>();
         var main = muzzleSystem.main;
         main.simulationSpeed = 2.0f;
         OriginalParent = transform.parent.gameObject;
@@ -67,12 +67,12 @@ public class Choppa : MonoBehaviourPunCallbacks
         if (shootingRight == true || shootingLeft == true || (shootingTest))
         {
             Shoot();
-            Muzzle.SetActive(true);
+            //Muzzle.SetActive(true);
         }
 
         else
         {
-            Muzzle.SetActive(false);
+            //Muzzle.SetActive(false);
         }
 
         if (transform.GetComponent<OVRGrabbable>().isGrabbed)

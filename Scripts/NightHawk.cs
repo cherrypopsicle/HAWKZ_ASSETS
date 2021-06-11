@@ -20,7 +20,7 @@ public class NightHawk : MonoBehaviourPunCallbacks
     [SerializeField] private float steerAngle, maxSteerAngle, speed, maxSpeed;
 
     [Header("Booleans")]
-    public bool accelerateHawk = false;
+    public bool accelerateHawk = true;
     public bool brakeHawk = false;
     public bool rotateHawk = true;
     public bool reverseHawk = false;
@@ -38,8 +38,9 @@ public class NightHawk : MonoBehaviourPunCallbacks
     [SerializeField] private Vector3 offsetPosition;
 
     // Steering 
-    [Header("Wheels")]
+    [SerializeField]
     private WheelCollider rearLeft, rearRight, frontLeft, frontRight;
+    [SerializeField]
     private Transform rearLeftT, rearRightT, frontLeftT, frontRightT;
 
     private bool spawnChoppa = false;
@@ -60,7 +61,6 @@ public class NightHawk : MonoBehaviourPunCallbacks
     {
         Sphere = transform.parent.gameObject;
         sphereTransform = Sphere.transform;
-        sphereRb = Sphere.GetComponent<Rigidbody>();
         SteeringWheel = GameObject.FindGameObjectWithTag("SteeringWheel");
 
         // Audio Source gameObjects
@@ -88,8 +88,7 @@ public class NightHawk : MonoBehaviourPunCallbacks
         //HawkTransform();
         //transform.position = sphereTransform.position - offsetPosition;
         //UpdateWheelPoses();
-        CalculateSteeringWheelRotation();
-        ApplyGravity();
+        //CalculateSteeringWheelRotation();
 
         // NEW SPHERICAL COLLIDER MECHANICS
         if (accelerateHawk == true)
@@ -161,50 +160,45 @@ public class NightHawk : MonoBehaviourPunCallbacks
         var destination = new Vector3(0, sphereTransform.localEulerAngles.y, 0);
         transform.localEulerAngles = Vector3.Lerp(transform.localEulerAngles, destination, 5.0f);
     }
-    void ApplyGravity()
-    {
-        sphereRb.AddForce(Vector3.down * 10.0f, ForceMode.Acceleration);
-    }
 
     // We remove the brake torques on all wheels then proceed to add motorTorque gradually
     void AccelerateHawk()
     {
-        //FrontRight.brakeTorque = 0;
-        //FrontLeft.brakeTorque = 0;
-        //RearLeft.brakeTorque = 0;
-        //RearRight.brakeTorque = 0;
-        //FrontRight.motorTorque = speed;
-        //FrontLeft.motorTorque = speed;
-        //RearLeft.motorTorque = speed;
-        //RearRight.motorTorque = speed;
+        frontRight.brakeTorque = 0;
+        frontLeft.brakeTorque = 0;
+        rearLeft.brakeTorque = 0;
+        rearRight.brakeTorque = 0;
+        frontRight.motorTorque = speed;
+        frontLeft.motorTorque = speed;
+        rearLeft.motorTorque = speed;
+        rearRight.motorTorque = speed;
         speed = speed + acceleration;
         speed = Mathf.Clamp(speed, 0.0f, maxSpeed);
-        sphereRb.AddForce(transform.forward * speed, ForceMode.Acceleration);
-        idleAudio.Stop();
-        if (!revAudio.isPlaying)
-        {
-            revAudio.Play();
-        }
+        //sphereRb.AddForce(transform.forward * speed, ForceMode.Acceleration);
+        //idleAudio.Stop();
+        //if (!revAudio.isPlaying)
+        //{
+        //    revAudio.Play();
+        //}
     }
 
     void ReverseHawk()
     {
-        //FrontRight.brakeTorque = 0;
-        //FrontLeft.brakeTorque = 0;
-        //RearLeft.brakeTorque = 0;
-        //RearRight.brakeTorque = 0;
-        //FrontRight.motorTorque = speed;
-        //FrontLeft.motorTorque = speed;
-        //RearLeft.motorTorque = speed;
-        //RearRight.motorTorque = speed;
+        frontRight.brakeTorque = 0;
+        frontLeft.brakeTorque = 0;
+        rearLeft.brakeTorque = 0;
+        rearRight.brakeTorque = 0;
+        frontRight.motorTorque = speed;
+        frontLeft.motorTorque = speed;
+        rearLeft.motorTorque = speed;
+        rearRight.motorTorque = speed;
         speed = speed - reverse;
         speed = Mathf.Clamp(speed, -maxSpeed, 0.0f);
-        sphereRb.AddForce(transform.forward * speed, ForceMode.Acceleration);
-        idleAudio.Stop();
-        if (!revAudio.isPlaying)
-        {
-            revAudio.Play();
-        }
+        //idleAudio.Stop();
+        //if (!revAudio.isPlaying)
+        //{
+        //    revAudio.Play();
+        //}
     }
 
     // When the player lets go of the acceleration trigger, we add brake torque to all wheels to gradually slow down the ATV.
@@ -213,16 +207,15 @@ public class NightHawk : MonoBehaviourPunCallbacks
     {
         speed = speed - 1.0f;
         speed = Mathf.Clamp(speed, 0.0f, maxSpeed);
-        sphereRb.AddForce(transform.forward * speed, ForceMode.Acceleration);
-        //FrontRight.brakeTorque = 200;
-        //FrontLeft.brakeTorque = 200;
-        //RearLeft.brakeTorque = 200;
-        //RearRight.brakeTorque = 200;
-        revAudio.Stop();
-        if (!idleAudio.isPlaying)
-        {
-            idleAudio.Play();
-        }
+        frontRight.brakeTorque = 200;
+        frontLeft.brakeTorque = 200;
+        rearLeft.brakeTorque = 200;
+        rearRight.brakeTorque = 200;
+        //revAudio.Stop();
+        //if (!idleAudio.isPlaying)
+        //{
+        //    idleAudio.Play();
+        //}
     }
     // Add BrakeTorque to wheels when braking, but also deactivate the motor force. This way the car stops instantly.
     void BrakeHawk()
@@ -235,10 +228,10 @@ public class NightHawk : MonoBehaviourPunCallbacks
         frontLeft.motorTorque = 0;
         rearLeft.motorTorque = 0;
         rearRight.motorTorque = 0;
-        if (!brakeAudio.isPlaying)
-        {
-            brakeAudio.Play();
-        }
+        //if (!brakeAudio.isPlaying)
+        //{
+        //    brakeAudio.Play();
+        //}
     }
     //void FindNormal()
     //{
