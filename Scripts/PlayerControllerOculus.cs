@@ -126,8 +126,8 @@ public class PlayerControllerOculus : MonoBehaviour
             {
                 //accelerateValue -= 0.1f;
                 //accelerateValue = Mathf.Clamp(accelerateValue, 0.0f, 1.0f);
-                NightHawk.GetComponent<NightHawk>().accelerateHawk = false;
-                NightHawk.GetComponent<NightHawk>().acceleration = accelerate * 5.0f;
+                //NightHawk.GetComponent<NightHawk>().accelerateHawk = false;
+                //NightHawk.GetComponent<NightHawk>().acceleration = accelerate * 5.0f;
             }
 
             // Use the A button to reverse the car

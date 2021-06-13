@@ -25,7 +25,7 @@ public class NightHawk : MonoBehaviourPunCallbacks
     public bool rotateHawk = true;
     public bool reverseHawk = false;
     public bool steerHawk = false;
-
+    public bool accelerate = true;
     [Header("Audiosources")]
     // AudioSources
     private AudioSource dropAudio, energyAudio, brakeAudio, revAudio, idleAudio, shotAudio;
@@ -87,11 +87,11 @@ public class NightHawk : MonoBehaviourPunCallbacks
         //FindNormal();
         //HawkTransform();
         //transform.position = sphereTransform.position - offsetPosition;
-        //UpdateWheelPoses();
+        UpdateWheelPoses();
         //CalculateSteeringWheelRotation();
 
         // NEW SPHERICAL COLLIDER MECHANICS
-        if (accelerateHawk == true)
+        if (accelerate == true)
         {
             AccelerateHawk();
         }
@@ -251,7 +251,6 @@ public class NightHawk : MonoBehaviourPunCallbacks
     {
         shotAudio.Play();
     }
-}
 
 
 // DEAD CODE
@@ -281,198 +280,200 @@ public class NightHawk : MonoBehaviourPunCallbacks
 //    transform.RotateAround(transform.position, transform.up, Time.deltaTime * rotateAngle * 90f);
 //}
 
-//void UpdateWheelPoses()
-//{
-//    UpdateWheelPose(frontLeft, frontLeftT);
-//    UpdateWheelPose(frontRight, frontRightT);
-//    UpdateWheelPose(rearLeft, rearLeftT);
-//    UpdateWheelPose(rearRight, rearRightT);
-//}
+void UpdateWheelPoses()
+{
+    UpdateWheelPose(frontLeft, frontLeftT);
+    UpdateWheelPose(frontRight, frontRightT);
+    UpdateWheelPose(rearLeft, rearLeftT);
+    UpdateWheelPose(rearRight, rearRightT);
+}
 
 //// Here, we attach the WheelCollider and WheelTransform. We first get the current position and quat from the wheel transform,
 //// then we pass those attributes to be modified (in order to get current wheelCollider pos and quat), then we pass that back to
 //// the wheelTransform. This in turn gives us the updated position and quaternion
-//void UpdateWheelPose(WheelCollider wheelCollider, Transform wheelTransform)
-//{
-//    Vector3 _pos = wheelTransform.position;
-//    Quaternion _quat = wheelTransform.rotation;
+void UpdateWheelPose(WheelCollider wheelCollider, Transform wheelTransform)
+{
+    Vector3 _pos = wheelTransform.position;
+    Quaternion _quat = wheelTransform.rotation;
 
-//    wheelCollider.GetWorldPose(out _pos, out _quat);
-//    wheelTransform.position = _pos;
-//    wheelTransform.rotation = _quat;
+    wheelCollider.GetWorldPose(out _pos, out _quat);
+    wheelTransform.position = _pos;
+    wheelTransform.rotation = _quat;
 
-//    // DELETE LATER
-//    //float zAngle = SteeringWheel.transform.localEulerAngles.z;
-//    //zAngle = (zAngle > 180) ? zAngle - 360 : zAngle;
-//    //float finalSteeringAngle = Mathf.Floor(zAngle);
-//    //var steer = -finalSteeringAngle / 180.0f;
-//    //Debug.Log(steer);
-//    // TODO: BRING THIS CODE ON THE RIGHT BACK WHEN IT'S TIME. FWR: " + FrontLeftT.rotation.eulerAngles.z;
-//    //WheelRotationUI.GetComponent<TextMeshProUGUI>().text = "SWR: " + finalSteeringAngle + " \nWSA: " + steerAngle + "\n Steer: " + steer; 
-//    // We check if the wheel has touched the ground. If it did, we want to check what the type of terrain is. Depending on what the terrain is
-//    // we apply different methods that modify the forward and sideway frictions accordingly.
-//    WheelHit hit;
-//    if (wheelCollider.GetGroundHit(out hit))
-//    {
-//        var force = hit.force;
-//        if (force >= 6000.0f)
-//        {
-//            //controller.dropped = true;
-//            //// TO-DO: Play only when it's a hard fall
-//            //if (!Drop.isPlaying) Drop.Play();
-//            GlitchOn();
-//        }
+    // DELETE LATER
+    //float zAngle = SteeringWheel.transform.localEulerAngles.z;
+    //zAngle = (zAngle > 180) ? zAngle - 360 : zAngle;
+    //float finalSteeringAngle = Mathf.Floor(zAngle);
+    //var steer = -finalSteeringAngle / 180.0f;
+    //Debug.Log(steer);
+    // TODO: BRING THIS CODE ON THE RIGHT BACK WHEN IT'S TIME. FWR: " + FrontLeftT.rotation.eulerAngles.z;
+    //WheelRotationUI.GetComponent<TextMeshProUGUI>().text = "SWR: " + finalSteeringAngle + " \nWSA: " + steerAngle + "\n Steer: " + steer; 
+    // We check if the wheel has touched the ground. If it did, we want to check what the type of terrain is. Depending on what the terrain is
+    // we apply different methods that modify the forward and sideway frictions accordingly.
+    WheelHit hit;
+    if (wheelCollider.GetGroundHit(out hit))
+    {
+        var force = hit.force;
+        if (force >= 6000.0f)
+        {
+            //controller.dropped = true;
+            //// TO-DO: Play only when it's a hard fall
+            //if (!Drop.isPlaying) Drop.Play();
+            //GlitchOn();
+        }
 
-//        var forwardSlip = hit.forwardSlip;
-//        var sidewaySlip = hit.sidewaysSlip;
+        var forwardSlip = hit.forwardSlip;
+        var sidewaySlip = hit.sidewaysSlip;
 
-//        if (forwardSlip > 0.9f || sidewaySlip > 0.9f)
-//        {
-//            brakeAudio.Play();
-//        }
+        if (forwardSlip > 0.9f || sidewaySlip > 0.9f)
+        {
+            //brakeAudio.Play();
+        }
 
-//        //Force.GetComponent<Text>().text = "Force: " + force;
-//        //ForwardSlip.GetComponent<Text>().text = "ForwardSlip: " + forwardSlip;
-//        //SidewaySlip.GetComponent<Text>().text = "SidewaySlip: " + sidewaySlip;
-//        //Velocity.GetComponent<Text>().text = "Velocity: " + velocity;
+        //Force.GetComponent<Text>().text = "Force: " + force;
+        //ForwardSlip.GetComponent<Text>().text = "ForwardSlip: " + forwardSlip;
+        //SidewaySlip.GetComponent<Text>().text = "SidewaySlip: " + sidewaySlip;
+        //Velocity.GetComponent<Text>().text = "Velocity: " + velocity;
 
-//        var terrain = hit.collider.gameObject.tag;
-//        switch (terrain)
-//        {
-//            case "Floor":
-//                FloorSlip(wheelCollider);
-//                break;
-//            case "SlipperyTerrain":
-//                SlipperyTerrainSlip(wheelCollider);
-//                break;
-//            case "RuggedTerrain":
-//                RuggedTerrain(wheelCollider);
-//                break;
-//            case "StickyTerrain":
-//                StickyTerrain(wheelCollider);
-//                break;
-//        }
-//    }
-//    else
-//    {
-//        // do nothing
-//    }
-//}
+        var terrain = hit.collider.gameObject.tag;
+        switch (terrain)
+        {
+            case "Floor":
+                //FloorSlip(wheelCollider);
+                break;
+            case "SlipperyTerrain":
+                //SlipperyTerrainSlip(wheelCollider);
+                break;
+            case "RuggedTerrain":
+                //RuggedTerrain(wheelCollider);
+                break;
+            case "StickyTerrain":
+                //StickyTerrain(wheelCollider);
+                break;
+        }
+    }
+    else
+    {
+        // do nothing
+    }
+}
 
-//void GlitchOn()
-//{
-//    glitching = true;
-//}
+    //void GlitchOn()
+    //{
+    //    glitching = true;
+    //}
 
-//// TODO: Import the RetroAesthetics namespace should you need to use it in the future. 
-//void Glitch()
-//{
-//    this.glitchTime += Time.deltaTime;
-//    if (this.glitchTime <= 0.5f)
-//    {
-//        // TODO: USE WITH POST PROCESSING
-//        //Camera.GetComponent<RetroCameraEffect>().randomGlitches = RetroCameraEffect.GlitchDirections.Horizontal;
-//        //Camera.GetComponent<RetroCameraEffect>().glitchIntensity = 2.5f;
-//        //Camera.GetComponent<RetroCameraEffect>().glitchFrequency = 50;
-//        //Camera.GetComponent<RetroCameraEffect>().bottomHeight = 0.5f;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementAmplitude = 5;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementFrequency = 150;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementSpeed = 5;
-//        //Camera.GetComponent<RetroCameraEffect>().chromaticAberration = 50;
-//    }
-//    else
-//    {
-//        this.glitchTime = 0.0f;
-//        this.glitching = false;
-//        // TODO: USE WITH POST PROCESSING
-//        //Camera.GetComponent<RetroCameraEffect>().randomGlitches = RetroCameraEffect.GlitchDirections.None;
-//        //Camera.GetComponent<RetroCameraEffect>().glitchIntensity = 0.0f;
-//        //Camera.GetComponent<RetroCameraEffect>().glitchFrequency = 0;
-//        //Camera.GetComponent<RetroCameraEffect>().bottomHeight = 0.116f;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementAmplitude = 0;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementFrequency = 0;
-//        //Camera.GetComponent<RetroCameraEffect>().displacementSpeed = 0;
-//        //Camera.GetComponent<RetroCameraEffect>().chromaticAberration = 13.7f;
-//    }
+    //// TODO: Import the RetroAesthetics namespace should you need to use it in the future. 
+    //void Glitch()
+    //{
+    //    this.glitchTime += Time.deltaTime;
+    //    if (this.glitchTime <= 0.5f)
+    //    {
+    //        // TODO: USE WITH POST PROCESSING
+    //        //Camera.GetComponent<RetroCameraEffect>().randomGlitches = RetroCameraEffect.GlitchDirections.Horizontal;
+    //        //Camera.GetComponent<RetroCameraEffect>().glitchIntensity = 2.5f;
+    //        //Camera.GetComponent<RetroCameraEffect>().glitchFrequency = 50;
+    //        //Camera.GetComponent<RetroCameraEffect>().bottomHeight = 0.5f;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementAmplitude = 5;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementFrequency = 150;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementSpeed = 5;
+    //        //Camera.GetComponent<RetroCameraEffect>().chromaticAberration = 50;
+    //    }
+    //    else
+    //    {
+    //        this.glitchTime = 0.0f;
+    //        this.glitching = false;
+    //        // TODO: USE WITH POST PROCESSING
+    //        //Camera.GetComponent<RetroCameraEffect>().randomGlitches = RetroCameraEffect.GlitchDirections.None;
+    //        //Camera.GetComponent<RetroCameraEffect>().glitchIntensity = 0.0f;
+    //        //Camera.GetComponent<RetroCameraEffect>().glitchFrequency = 0;
+    //        //Camera.GetComponent<RetroCameraEffect>().bottomHeight = 0.116f;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementAmplitude = 0;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementFrequency = 0;
+    //        //Camera.GetComponent<RetroCameraEffect>().displacementSpeed = 0;
+    //        //Camera.GetComponent<RetroCameraEffect>().chromaticAberration = 13.7f;
+    //    }
 
-//}
+    //}
 
-//void SlipperyTerrainSlip(WheelCollider _collider)
-//{
-//    // Modifying main terrain to make it slippery forward and sideways
-//    // 50 2 20 1 1
-//    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
-//    forwardFriction.extremumSlip = slipperySlipValues[0];
-//    forwardFriction.extremumValue = slipperySlipValues[1];
-//    forwardFriction.asymptoteSlip = slipperySlipValues[2];
-//    forwardFriction.asymptoteValue = slipperySlipValues[3];
-//    forwardFriction.stiffness = slipperySlipValues[4];
-//    _collider.forwardFriction = forwardFriction;
+    //void SlipperyTerrainSlip(WheelCollider _collider)
+    //{
+    //    // Modifying main terrain to make it slippery forward and sideways
+    //    // 50 2 20 1 1
+    //    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
+    //    forwardFriction.extremumSlip = slipperySlipValues[0];
+    //    forwardFriction.extremumValue = slipperySlipValues[1];
+    //    forwardFriction.asymptoteSlip = slipperySlipValues[2];
+    //    forwardFriction.asymptoteValue = slipperySlipValues[3];
+    //    forwardFriction.stiffness = slipperySlipValues[4];
+    //    _collider.forwardFriction = forwardFriction;
 
-//    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
-//    sidewaysFriction.extremumSlip = slipperySlipValues[0];
-//    sidewaysFriction.extremumValue = slipperySlipValues[1];
-//    sidewaysFriction.asymptoteSlip = slipperySlipValues[2];
-//    sidewaysFriction.asymptoteValue = slipperySlipValues[3];
-//    sidewaysFriction.stiffness = slipperySlipValues[4];
-//    _collider.sidewaysFriction = sidewaysFriction;
-//}
+    //    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
+    //    sidewaysFriction.extremumSlip = slipperySlipValues[0];
+    //    sidewaysFriction.extremumValue = slipperySlipValues[1];
+    //    sidewaysFriction.asymptoteSlip = slipperySlipValues[2];
+    //    sidewaysFriction.asymptoteValue = slipperySlipValues[3];
+    //    sidewaysFriction.stiffness = slipperySlipValues[4];
+    //    _collider.sidewaysFriction = sidewaysFriction;
+    //}
 
-//void FloorSlip(WheelCollider _collider)
-//{
-//    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
-//    forwardFriction.extremumSlip = floorSlipValues[0];
-//    forwardFriction.extremumValue = floorSlipValues[1];
-//    forwardFriction.asymptoteSlip = floorSlipValues[2];
-//    forwardFriction.asymptoteValue = floorSlipValues[3];
-//    forwardFriction.stiffness = floorSlipValues[4];
-//    _collider.forwardFriction = forwardFriction;
+    //void FloorSlip(WheelCollider _collider)
+    //{
+    //    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
+    //    forwardFriction.extremumSlip = floorSlipValues[0];
+    //    forwardFriction.extremumValue = floorSlipValues[1];
+    //    forwardFriction.asymptoteSlip = floorSlipValues[2];
+    //    forwardFriction.asymptoteValue = floorSlipValues[3];
+    //    forwardFriction.stiffness = floorSlipValues[4];
+    //    _collider.forwardFriction = forwardFriction;
 
-//    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
-//    sidewaysFriction.extremumSlip = floorSlipValues[0];
-//    sidewaysFriction.extremumValue = floorSlipValues[1];
-//    sidewaysFriction.asymptoteSlip = floorSlipValues[2];
-//    sidewaysFriction.asymptoteValue = floorSlipValues[3];
-//    sidewaysFriction.stiffness = floorSlipValues[4];
-//    _collider.sidewaysFriction = sidewaysFriction;
-//}
+    //    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
+    //    sidewaysFriction.extremumSlip = floorSlipValues[0];
+    //    sidewaysFriction.extremumValue = floorSlipValues[1];
+    //    sidewaysFriction.asymptoteSlip = floorSlipValues[2];
+    //    sidewaysFriction.asymptoteValue = floorSlipValues[3];
+    //    sidewaysFriction.stiffness = floorSlipValues[4];
+    //    _collider.sidewaysFriction = sidewaysFriction;
+    //}
 
-//void RuggedTerrain(WheelCollider _collider)
-//{
-//    // Modifying main terrain to make it move forward and sideways with little slip
-//    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
-//    forwardFriction.extremumSlip = 2.0f;
-//    forwardFriction.extremumValue = 5.0f;
-//    forwardFriction.asymptoteSlip = 5.0f;
-//    forwardFriction.asymptoteValue = 2.0f;
-//    forwardFriction.stiffness = 10.0f;
-//    _collider.forwardFriction = forwardFriction;
+    //void RuggedTerrain(WheelCollider _collider)
+    //{
+    //    // Modifying main terrain to make it move forward and sideways with little slip
+    //    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
+    //    forwardFriction.extremumSlip = 2.0f;
+    //    forwardFriction.extremumValue = 5.0f;
+    //    forwardFriction.asymptoteSlip = 5.0f;
+    //    forwardFriction.asymptoteValue = 2.0f;
+    //    forwardFriction.stiffness = 10.0f;
+    //    _collider.forwardFriction = forwardFriction;
 
-//    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
-//    sidewaysFriction.extremumSlip = 2.0f;
-//    sidewaysFriction.extremumValue = 5.0f;
-//    sidewaysFriction.asymptoteSlip = 5.0f;
-//    sidewaysFriction.asymptoteValue = 2.0f;
-//    sidewaysFriction.stiffness = 10.0f;
-//    _collider.sidewaysFriction = sidewaysFriction;
-//}
+    //    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
+    //    sidewaysFriction.extremumSlip = 2.0f;
+    //    sidewaysFriction.extremumValue = 5.0f;
+    //    sidewaysFriction.asymptoteSlip = 5.0f;
+    //    sidewaysFriction.asymptoteValue = 2.0f;
+    //    sidewaysFriction.stiffness = 10.0f;
+    //    _collider.sidewaysFriction = sidewaysFriction;
+    //}
 
-//void StickyTerrain(WheelCollider _collider)
-//{
-//    // Modifying main terrain to make it move forward and sideways with little slip
-//    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
-//    forwardFriction.extremumSlip = 0.1f;
-//    forwardFriction.extremumValue = 5.0f;
-//    forwardFriction.asymptoteSlip = 0.3f;
-//    forwardFriction.asymptoteValue = 4.0f;
-//    forwardFriction.stiffness = 1.0f;
-//    _collider.forwardFriction = forwardFriction;
+    //void StickyTerrain(WheelCollider _collider)
+    //{
+    //    // Modifying main terrain to make it move forward and sideways with little slip
+    //    WheelFrictionCurve forwardFriction = _collider.forwardFriction;
+    //    forwardFriction.extremumSlip = 0.1f;
+    //    forwardFriction.extremumValue = 5.0f;
+    //    forwardFriction.asymptoteSlip = 0.3f;
+    //    forwardFriction.asymptoteValue = 4.0f;
+    //    forwardFriction.stiffness = 1.0f;
+    //    _collider.forwardFriction = forwardFriction;
 
-//    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
-//    sidewaysFriction.extremumSlip = 0.1f;
-//    sidewaysFriction.extremumValue = 5.0f;
-//    sidewaysFriction.asymptoteSlip = 0.3f;
-//    sidewaysFriction.asymptoteValue = 4.0f;
-//    sidewaysFriction.stiffness = 1.0f;
-//    _collider.sidewaysFriction = sidewaysFriction;
-//}
+    //    WheelFrictionCurve sidewaysFriction = _collider.sidewaysFriction;
+    //    sidewaysFriction.extremumSlip = 0.1f;
+    //    sidewaysFriction.extremumValue = 5.0f;
+    //    sidewaysFriction.asymptoteSlip = 0.3f;
+    //    sidewaysFriction.asymptoteValue = 4.0f;
+    //    sidewaysFriction.stiffness = 1.0f;
+    //    _collider.sidewaysFriction = sidewaysFriction;
+    //}
+
+}

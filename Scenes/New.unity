@@ -230,6 +230,36 @@ PrefabInstance:
       propertyPath: m_TagString
       value: ShooterSeat
       objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000028088027
+      objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 179.99998
+      objectReference: {fileID: 0}
+    - target: {fileID: 5860953548167575913, guid: 8e506f1556c424e429d0867e8068dc72,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 6335792854732977310, guid: 8e506f1556c424e429d0867e8068dc72,
         type: 3}
       propertyPath: m_Enabled
@@ -294,22 +324,22 @@ PrefabInstance:
         type: 3}
       propertyPath: rearLeftT
       value: 
-      objectReference: {fileID: 2105160751}
+      objectReference: {fileID: 953383711}
     - target: {fileID: 6838730254686975405, guid: 8e506f1556c424e429d0867e8068dc72,
         type: 3}
       propertyPath: rearRightT
       value: 
-      objectReference: {fileID: 1421871365}
+      objectReference: {fileID: 1580547644}
     - target: {fileID: 6838730254686975405, guid: 8e506f1556c424e429d0867e8068dc72,
         type: 3}
       propertyPath: frontLeftT
       value: 
-      objectReference: {fileID: 953383711}
+      objectReference: {fileID: 2105160751}
     - target: {fileID: 6838730254686975405, guid: 8e506f1556c424e429d0867e8068dc72,
         type: 3}
       propertyPath: frontRightT
       value: 
-      objectReference: {fileID: 1580547644}
+      objectReference: {fileID: 1421871365}
     - target: {fileID: 7151352886291652136, guid: 8e506f1556c424e429d0867e8068dc72,
         type: 3}
       propertyPath: m_textInfo.characterCount
